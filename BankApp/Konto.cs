@@ -10,7 +10,7 @@
 
         public string Pesel;
 
-        public Konto(string imie, string nazwisko, string pesel)
+        public Konto(string imie, string nazwisko, string pesel, string? promoCode = null)
         {
             Imie = imie;
             Nazwisko = nazwisko;
@@ -18,6 +18,14 @@
                 pesel
                 :
                 "Niepoprawny pesel!";
+
+            if (IsPromoCodeValid(promoCode))
+            {
+                Saldo += 50;
+            }
         }
+
+        public static bool IsPromoCodeValid(string? promoCode) =>
+            promoCode != null && promoCode.StartsWith("PROM_") && promoCode.Length == 8;
     }
 }
