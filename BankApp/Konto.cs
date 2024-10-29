@@ -19,7 +19,7 @@
                 :
                 "Niepoprawny pesel!";
 
-            if (IsPromoCodeValid(promoCode))
+            if (IsPromoCodeValid(promoCode) && IsPeselValidForPromo(pesel))
             {
                 Saldo += 50;
             }
@@ -27,5 +27,8 @@
 
         public static bool IsPromoCodeValid(string? promoCode) =>
             promoCode != null && promoCode.StartsWith("PROM_") && promoCode.Length == 8;
+
+        public static bool IsPeselValidForPromo(string pesel) =>
+            pesel[2] == '2' || int.Parse(pesel[..2]) >= 60;
     }
 }
