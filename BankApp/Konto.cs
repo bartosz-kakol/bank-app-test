@@ -25,6 +25,12 @@
             }
         }
 
+        public void Transfer(Konto targetAccount, int amount)
+        {
+            Saldo -= amount;
+            targetAccount.Saldo += amount;
+        }
+
         public static bool IsPromoCodeValid(string? promoCode) =>
             promoCode != null && promoCode.StartsWith("PROM_") && promoCode.Length == 8;
 
