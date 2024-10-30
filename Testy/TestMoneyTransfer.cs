@@ -39,5 +39,17 @@ namespace Testy
             Assert.That(konto2.Saldo, Is.EqualTo(750), "Saldo konta drugiego nie zostało obniżone poprawnie!");
             Assert.That(konto1.Saldo, Is.EqualTo(1250), "Saldo konta pierwszego nie zostało podwyższone poprawnie!");
         }
+
+        [Test]
+        public void TestInvalidTransfer()
+        {
+            konto1.Saldo = 0;
+            konto2.Saldo = 200;
+
+            konto1.Transfer(konto2, 100);
+
+            Assert.That(konto1.Saldo, Is.Zero, "Saldo konta pierwszego zostało zaktualizowane, mimo że nie powinno!");
+            Assert.That(konto2.Saldo, Is.EqualTo(200), "Saldo konta drugiego zostało zaktualizowane, mimo że nie powinno!");
+        }
     }
 }

@@ -27,6 +27,11 @@
 
         public void Transfer(Konto targetAccount, int amount)
         {
+            if (Saldo < amount)
+            {
+                return;
+            }
+
             Saldo -= amount;
             targetAccount.Saldo += amount;
         }
