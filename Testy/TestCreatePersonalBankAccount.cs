@@ -12,12 +12,12 @@ namespace Testy
 
         private const string PROMOCODE = "PROM_ABC";
 
-        private Konto konto;
+        private KontoOsobiste konto;
 
         [SetUp]
         public void Setup()
         {
-            konto = new Konto(IMIE, NAZWISKO, PESEL);
+            konto = new KontoOsobiste(IMIE, NAZWISKO, PESEL);
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace Testy
         [TestCase("1234567ABCD")]
         public void TestPesel(string pesel)
         {
-            konto = new Konto(IMIE, NAZWISKO, pesel);
+            konto = new KontoOsobiste(IMIE, NAZWISKO, pesel);
 
             Assert.That(konto.Pesel, Is.EqualTo("Niepoprawny pesel!"), "Pesel nie zosta³ zweryfikowany!");
         }
@@ -45,7 +45,7 @@ namespace Testy
         [TestCase("PROM123")]
         public void TestInvalidPromo(string promoCode)
         {
-            konto = new Konto(IMIE, NAZWISKO, PESEL, promoCode);
+            konto = new KontoOsobiste(IMIE, NAZWISKO, PESEL, promoCode);
 
             Assert.That(konto.Saldo, Is.Zero, "Saldo zosta³o zaktualizowane przy niepoprawnym kodzie promocyjnym!");
         }
@@ -57,7 +57,7 @@ namespace Testy
         [TestCase("10210112345")]
         public void TestPromoCorrectAge(string pesel)
         {
-            konto = new Konto(IMIE, NAZWISKO, pesel, PROMOCODE);
+            konto = new KontoOsobiste(IMIE, NAZWISKO, pesel, PROMOCODE);
 
             Assert.That(konto.Saldo, Is.EqualTo(50), "Premia nie zosta³a przyznana przy poprawnym wieku urodzenia!");
         }
@@ -67,7 +67,7 @@ namespace Testy
         [TestCase("00010112345")]
         public void TestPromoInvalidAge(string pesel)
         {
-            konto = new Konto(IMIE, NAZWISKO, pesel, PROMOCODE);
+            konto = new KontoOsobiste(IMIE, NAZWISKO, pesel, PROMOCODE);
 
             Assert.That(konto.Saldo, Is.Zero, "Premia zosta³a przyznana przy zbyt niskim roku urodzenia!");
         }
