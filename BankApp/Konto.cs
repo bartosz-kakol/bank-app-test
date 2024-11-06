@@ -1,45 +1,23 @@
-﻿namespace BankApp
+﻿namespace BankApp;
+
+public class Konto
 {
-    public class Konto
+    public int Saldo;
+
+    public void Transfer(Konto targetAccount, int amount)
     {
-        public string Imie;
-
-        public string Nazwisko;
-
-        public int Saldo = 0;
-
-        public string Pesel;
-
-        public Konto(string imie, string nazwisko, string pesel, string? promoCode = null)
+        if (Saldo < amount)
         {
-            Imie = imie;
-            Nazwisko = nazwisko;
-            Pesel = pesel.Length == 11 && pesel.All(Char.IsDigit) ?
-                pesel
-                :
-                "Niepoprawny pesel!";
-
-            if (IsPromoCodeValid(promoCode) && IsPeselValidForPromo(pesel))
-            {
-                Saldo += 50;
-            }
+            return;
         }
 
-        public void Transfer(Konto targetAccount, int amount)
-        {
-            if (Saldo < amount)
-            {
-                return;
-            }
-
-            Saldo -= amount;
-            targetAccount.Saldo += amount;
-        }
-
-        public static bool IsPromoCodeValid(string? promoCode) =>
-            promoCode != null && promoCode.StartsWith("PROM_") && promoCode.Length == 8;
-
-        public static bool IsPeselValidForPromo(string pesel) =>
-            pesel[2] == '2' || int.Parse(pesel[..2]) >= 60;
+        Saldo -= amount;
+        targetAccount.Saldo += amount;
     }
+
+    public static bool IsPromoCodeValid(string? promoCode) =>
+        promoCode != null && promoCode.StartsWith("PROM_") && promoCode.Length == 8;
+
+    public static bool IsPeselValidForPromo(string pesel) =>
+        pesel[2] == '2' || int.Parse(pesel[..2]) >= 60;
 }
