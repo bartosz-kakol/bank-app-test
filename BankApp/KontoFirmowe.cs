@@ -1,15 +1,14 @@
-﻿namespace BankApp
+﻿namespace BankApp;
+
+public class KontoFirmowe : Konto
 {
-    public class KontoFirmowe : Konto
+    public string NazwaFirmy;
+
+    public string NIP;
+
+    public KontoFirmowe(string nazwaFirmy, string nip)
     {
-        public string NazwaFirmy;
-
-        public string NIP;
-
-        public KontoFirmowe(string nazwaFirmy, string nip)
-        {
-            NazwaFirmy = nazwaFirmy;
-            NIP = nip;
-        }
+        NazwaFirmy = nazwaFirmy;
+        NIP = nip;
     }
 }

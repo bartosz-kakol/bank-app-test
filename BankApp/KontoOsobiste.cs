@@ -1,26 +1,25 @@
-﻿namespace BankApp
+﻿namespace BankApp;
+
+public class KontoOsobiste : Konto
 {
-    public class KontoOsobiste : Konto
+    public string Imie;
+
+    public string Nazwisko;
+
+    public string Pesel;
+
+    public KontoOsobiste(string imie, string nazwisko, string pesel, string? promoCode = null)
     {
-        public string Imie;
+        Imie = imie;
+        Nazwisko = nazwisko;
+        Pesel = pesel.Length == 11 && pesel.All(char.IsDigit) ?
+            pesel
+            :
+            "Niepoprawny pesel!";
 
-        public string Nazwisko;
-
-        public string Pesel;
-
-        public KontoOsobiste(string imie, string nazwisko, string pesel, string? promoCode = null)
+        if (IsPromoCodeValid(promoCode) && IsPeselValidForPromo(pesel))
         {
-            Imie = imie;
-            Nazwisko = nazwisko;
-            Pesel = pesel.Length == 11 && pesel.All(Char.IsDigit) ?
-                pesel
-                :
-                "Niepoprawny pesel!";
-
-            if (IsPromoCodeValid(promoCode) && IsPeselValidForPromo(pesel))
-            {
-                Saldo += 50;
-            }
+            Saldo += 50;
         }
     }
 }

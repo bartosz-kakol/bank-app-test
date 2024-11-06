@@ -1,31 +1,25 @@
 ﻿using BankApp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Testy
+namespace Testy;
+
+internal class TestCreateCompanyAccount
 {
-    internal class TestCreateCompanyAccount
+    private const string NAZWA_FIRMY = "Januszex";
+
+    private const string NIP = "1234567890";
+
+    private KontoFirmowe konto;
+
+    [SetUp]
+    public void Setup()
     {
-        private const string NAZWA_FIRMY = "Januszex";
+        konto = new KontoFirmowe(NAZWA_FIRMY, NIP);
+    }
 
-        private const string NIP = "1234567890";
-
-        private KontoFirmowe konto;
-
-        [SetUp]
-        public void Setup()
-        {
-            konto = new KontoFirmowe(NAZWA_FIRMY, NIP);
-        }
-
-        [Test]
-        public void CreateCompanyAccount()
-        {
-            Assert.That(konto.NazwaFirmy, Is.EqualTo(NAZWA_FIRMY), "Nazwa firmy nie została zapisana!");
-            Assert.That(konto.NIP, Is.EqualTo(NIP), "NIP nie został zapisany!");
-        }
+    [Test]
+    public void CreateCompanyAccount()
+    {
+        Assert.That(konto.NazwaFirmy, Is.EqualTo(NAZWA_FIRMY), "Nazwa firmy nie została zapisana!");
+        Assert.That(konto.NIP, Is.EqualTo(NIP), "NIP nie został zapisany!");
     }
 }
