@@ -5,11 +5,8 @@ namespace Testy;
 public class Tests
 {
     private const string IMIE = "Dariusz";
-
     private const string NAZWISKO = "Januszewski";
-
     private const string PESEL = "12345678901";
-
     private const string PROMOCODE = "PROM_ABC";
 
     private KontoOsobiste konto;

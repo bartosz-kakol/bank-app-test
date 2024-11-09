@@ -2,6 +2,12 @@
 
 public class KontoOsobiste : Konto
 {
+    public override Fees Fees => new()
+    {
+        NormalTranfer = 0,
+        ExpressTransfer = 1
+    };
+    
     public string Imie;
 
     public string Nazwisko;
