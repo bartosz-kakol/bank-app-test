@@ -5,7 +5,6 @@ namespace Testy;
 internal class TestCreateCompanyAccount
 {
     private const string NAZWA_FIRMY = "Januszex";
-
     private const string NIP = "1234567890";
 
     private KontoFirmowe konto;

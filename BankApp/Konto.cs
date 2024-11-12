@@ -1,19 +1,10 @@
 ﻿namespace BankApp;
 
-public class Konto
+public abstract class Konto
 {
+    public abstract Fees Fees { get; }
+    
     public int Saldo;
-
-    public void Transfer(Konto targetAccount, int amount)
-    {
-        if (Saldo < amount)
-        {
-            return;
-        }
-
-        Saldo -= amount;
-        targetAccount.Saldo += amount;
-    }
 
     public static bool IsPromoCodeValid(string? promoCode) =>
         promoCode != null && promoCode.StartsWith("PROM_") && promoCode.Length == 8;
