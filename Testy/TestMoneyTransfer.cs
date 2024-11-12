@@ -102,4 +102,22 @@ public class TestMoneyTransfer
         Assert.That(kontoOsobiste1.Saldo, Is.Zero, "Saldo konta pierwszego zostało zaktualizowane, mimo że nie powinno!");
         Assert.That(kontoOsobiste2.Saldo, Is.EqualTo(200), "Saldo konta drugiego zostało zaktualizowane, mimo że nie powinno!");
     }
+
+    [Test]
+    public void TestInvalidTransferType()
+    {
+        kontoOsobiste1.Saldo = kontoOsobiste2.Saldo = 1;
+        
+        var transfer = new Przelew(
+            kontoZrodlowe: kontoOsobiste1,
+            kontoDocelowe: kontoOsobiste2,
+            kwota: 1,
+            rodzaj: (Przelew.Rodzaj)999
+        );
+
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+        {
+            transfer.Wykonaj();
+        });
+    }
 }
