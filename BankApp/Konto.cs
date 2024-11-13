@@ -6,6 +6,8 @@ public abstract class Konto
     
     public int Saldo;
 
+    public List<int> Historia = [];
+
     public static bool IsPromoCodeValid(string? promoCode) =>
         promoCode != null && promoCode.StartsWith("PROM_") && promoCode.Length == 8;
 
