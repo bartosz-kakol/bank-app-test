@@ -28,4 +28,26 @@ public class KontoOsobiste : Konto
             Saldo += 50;
         }
     }
+
+    private bool CzyMozeWziacKredyt(int kwota)
+    {
+        return
+            (
+                Historia.Wszystko.Count >= 3 &&
+                Historia.Wszystko.TakeLast(3).All(v => v > 0)
+            )
+            ||
+            (
+                Historia.Wyplaty.Count >= 5 &&
+                Historia.Wyplaty.Select(v => -v).TakeLast(5).Sum() > kwota
+            );
+    }
+
+    public void ZaciagnijKredyt(int kwota)
+    {
+        if (CzyMozeWziacKredyt(kwota))
+        {
+            Wplac(kwota);
+        }
+    }
 }

@@ -30,8 +30,8 @@ public class TestMoneyTransfer
     public void TestTransfer(Konto acc1, Konto acc2)
     {
         acc1.Saldo = acc2.Saldo = 1000;
-        acc1.Historia = [];
-        acc2.Historia = [];
+        acc1.Historia = new Historia();
+        acc2.Historia = new Historia();
         
         var transfer = new Przelew(
             kontoZrodlowe: acc1,
@@ -43,15 +43,11 @@ public class TestMoneyTransfer
         Assert.That(acc1.Saldo, Is.EqualTo(900 - acc1.Fees.NormalTranfer), "Saldo konta pierwszego nie zostało obniżone poprawnie!");
         Assert.That(acc2.Saldo, Is.EqualTo(1100), "Saldo konta drugiego nie zostało podwyższone poprawnie!");
 
-        var targetAccountExpectedHistory = new List<int> { -100 };
-
-        if (acc1.Fees.NormalTranfer > 0)
-        {
-            targetAccountExpectedHistory.Add(-acc1.Fees.NormalTranfer);
-        }
+        var sourceAccountExpectedHistory = new Historia(-100, -acc1.Fees.NormalTranfer);
+        var targetAccountExpectedHistory = new Historia(100);
         
-        Assert.That(acc1.Historia, Is.EqualTo(targetAccountExpectedHistory), "Historia konta pierwszego jest niepoprawna!");
-        Assert.That(acc2.Historia, Is.EqualTo(new List<int> { 100 }), "Historia konta drugiego jest niepoprawna!");
+        Assert.That(acc1.Historia.Wszystko, Is.EqualTo(sourceAccountExpectedHistory.Wszystko), "Historia konta pierwszego jest niepoprawna!");
+        Assert.That(acc2.Historia.Wszystko, Is.EqualTo(targetAccountExpectedHistory.Wszystko), "Historia konta drugiego jest niepoprawna!");
     }
 
     [Test, TestCaseSource(nameof(TestAccountProvider))]
@@ -59,8 +55,8 @@ public class TestMoneyTransfer
     {
         acc1.Saldo = 0;
         acc2.Saldo = 200;
-        acc1.Historia = [];
-        acc2.Historia = [];
+        acc1.Historia = new Historia();
+        acc2.Historia = new Historia();
 
         var transfer = new Przelew(
             kontoZrodlowe: acc1,
@@ -71,16 +67,16 @@ public class TestMoneyTransfer
 
         Assert.That(acc1.Saldo, Is.Zero, "Saldo konta pierwszego zostało zaktualizowane, mimo że nie powinno!");
         Assert.That(acc2.Saldo, Is.EqualTo(200), "Saldo konta drugiego zostało zaktualizowane, mimo że nie powinno!");
-        Assert.That(acc1.Historia, Is.Empty, "Historia konta pierwszego nie jest pusta!");
-        Assert.That(acc2.Historia, Is.Empty, "Historia konta drugiego nie jest pusta!");
+        Assert.That(acc1.Historia.Wszystko, Is.Empty, "Historia konta pierwszego nie jest pusta!");
+        Assert.That(acc2.Historia.Wszystko, Is.Empty, "Historia konta drugiego nie jest pusta!");
     }
 
     [Test, TestCaseSource(nameof(TestAccountProvider))]
     public void TestExpressTransfer(Konto acc1, Konto acc2)
     {
         acc1.Saldo = acc2.Saldo = 1000;
-        acc1.Historia = [];
-        acc2.Historia = [];
+        acc1.Historia = new Historia();
+        acc2.Historia = new Historia();
 
         var transfer = new Przelew(
             kontoZrodlowe: acc1,
@@ -93,15 +89,11 @@ public class TestMoneyTransfer
         Assert.That(acc1.Saldo, Is.EqualTo(900 - acc1.Fees.ExpressTransfer), "Saldo konta pierwszego nie zostało obniżone poprawnie!");
         Assert.That(acc2.Saldo, Is.EqualTo(1100), "Saldo konta drugiego nie zostało podwyższone poprawnie!");
         
-        var targetAccountExpectedHistory = new List<int> { -100 };
-
-        if (acc1.Fees.ExpressTransfer > 0)
-        {
-            targetAccountExpectedHistory.Add(-acc1.Fees.ExpressTransfer);
-        }
+        var sourceAccountExpectedHistory = new Historia(-100, -acc1.Fees.ExpressTransfer);
+        var targetAccountExpectedHistory = new Historia(100);
         
-        Assert.That(acc1.Historia, Is.EqualTo(targetAccountExpectedHistory), "Historia konta pierwszego jest niepoprawna!");
-        Assert.That(acc2.Historia, Is.EqualTo(new List<int> { 100 }), "Historia konta drugiego jest niepoprawna!");
+        Assert.That(acc1.Historia.Wszystko, Is.EqualTo(sourceAccountExpectedHistory.Wszystko), "Historia konta pierwszego jest niepoprawna!");
+        Assert.That(acc2.Historia.Wszystko, Is.EqualTo(targetAccountExpectedHistory.Wszystko), "Historia konta drugiego jest niepoprawna!");
     }
     
     [Test, TestCaseSource(nameof(TestAccountProvider))]
@@ -109,8 +101,8 @@ public class TestMoneyTransfer
     {
         kontoOsobiste1.Saldo = 0;
         kontoOsobiste2.Saldo = 200;
-        acc1.Historia = [];
-        acc2.Historia = [];
+        acc1.Historia = new Historia();
+        acc2.Historia = new Historia();
 
         var transfer = new Przelew(
             kontoZrodlowe: kontoOsobiste1,
@@ -128,8 +120,8 @@ public class TestMoneyTransfer
     public void TestInvalidTransferType(Konto acc1, Konto acc2)
     {
         acc1.Saldo = acc2.Saldo = 1;
-        acc1.Historia = [];
-        acc2.Historia = [];
+        acc1.Historia = new Historia();
+        acc2.Historia = new Historia();
         
         var transfer = new Przelew(
             kontoZrodlowe: acc1,
@@ -144,7 +136,7 @@ public class TestMoneyTransfer
         });
         Assert.That(acc1.Saldo, Is.EqualTo(1), "Saldo konta pierwszego zostało zaktualizowane, mimo że nie powinno!");
         Assert.That(acc2.Saldo, Is.EqualTo(1), "Saldo konta drugiego zostało zaktualizowane, mimo że nie powinno!");
-        Assert.That(acc1.Historia, Is.Empty, "Historia konta pierwszego nie jest pusta!");
-        Assert.That(acc2.Historia, Is.Empty, "Historia konta drugiego nie jest pusta!");
+        Assert.That(acc1.Historia.Wszystko, Is.Empty, "Historia konta pierwszego nie jest pusta!");
+        Assert.That(acc2.Historia.Wszystko, Is.Empty, "Historia konta drugiego nie jest pusta!");
     }
 }
