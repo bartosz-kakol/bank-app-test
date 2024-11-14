@@ -8,6 +8,12 @@ public abstract class Konto
 
     public List<int> Historia = [];
 
+    public void ModyfikujSaldo(int kwota)
+    {
+        Saldo += kwota;
+        Historia.Add(kwota);
+    }
+
     public static bool IsPromoCodeValid(string? promoCode) =>
         promoCode != null && promoCode.StartsWith("PROM_") && promoCode.Length == 8;
 

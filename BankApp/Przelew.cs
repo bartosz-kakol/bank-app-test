@@ -44,8 +44,8 @@ public class Przelew
             _ => throw new ArgumentOutOfRangeException(nameof(rodzaj))
         };
 
-        ModyfikujSaldo(kontoZrodlowe, -kwota);
-        ModyfikujSaldo(kontoDocelowe, kwota);
+        kontoZrodlowe.ModyfikujSaldo(-kwota);
+        kontoDocelowe.ModyfikujSaldo(kwota);
 
         if (oplata > 0)
         {
