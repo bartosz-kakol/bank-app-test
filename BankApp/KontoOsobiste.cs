@@ -33,13 +33,13 @@ public class KontoOsobiste : Konto
     {
         return
             (
-                Historia.Count >= 3 &&
-                Historia.TakeLast(3).All(v => v > 0)
+                Historia.Wszystko.Count >= 3 &&
+                Historia.Wszystko.TakeLast(3).All(v => v > 0)
             )
             ||
             (
-                Historia.FindAll(v => v < 0).Count >= 5 &&
-                Historia.FindAll(v => v < 0).Select(v => -v).TakeLast(5).Sum() > kwota
+                Historia.Wyplaty.Count >= 5 &&
+                Historia.Wyplaty.Select(v => -v).TakeLast(5).Sum() > kwota
             );
     }
 
@@ -47,7 +47,7 @@ public class KontoOsobiste : Konto
     {
         if (CzyMozeWziacKredyt(kwota))
         {
-            ModyfikujSaldo(kwota);
+            Wplac(kwota);
         }
     }
 }

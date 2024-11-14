@@ -14,21 +14,21 @@ public class TestLoan
     {
         get
         {
-            yield return new TestCaseData(new List<int> { 1, 1, -1 });
-            yield return new TestCaseData(new List<int> { 1, -1, 1 });
-            yield return new TestCaseData(new List<int> { -1, 1, 1 });
-            yield return new TestCaseData(new List<int> { -1, 1, -1 });
-            yield return new TestCaseData(new List<int> { 1, -1, -1 });
-            yield return new TestCaseData(new List<int> { -1, -1, 1 });
-            yield return new TestCaseData(new List<int> { -1, -1, -1 });
-            yield return new TestCaseData(new List<int> { 1, 1 });
-            yield return new TestCaseData(new List<int> { 1 });
-            yield return new TestCaseData(new List<int>());
+            yield return new TestCaseData(new Historia(1, 1, -1));
+            yield return new TestCaseData(new Historia(1, -1, 1));
+            yield return new TestCaseData(new Historia(-1, 1, 1));
+            yield return new TestCaseData(new Historia(-1, 1, -1));
+            yield return new TestCaseData(new Historia(1, -1, -1));
+            yield return new TestCaseData(new Historia(-1, -1, 1));
+            yield return new TestCaseData(new Historia(-1, -1, -1));
+            yield return new TestCaseData(new Historia(1, 1));
+            yield return new TestCaseData(new Historia(1));
+            yield return new TestCaseData(new Historia());
             
-            yield return new TestCaseData(new List<int> { -1, -1, -1, -1, -1 });
-            yield return new TestCaseData(new List<int> { 10, -1, -1, -1, -1, -1 });
-            yield return new TestCaseData(new List<int> { 1, -1, -1, -1, -1, -10 });
-            yield return new TestCaseData(new List<int> { 1, -10, -10, -10, -10, -10 });
+            yield return new TestCaseData(new Historia(-1, -1, -1, -1, -1));
+            yield return new TestCaseData(new Historia(10, -1, -1, -1, -1, -1));
+            yield return new TestCaseData(new Historia(1, -1, -1, -1, -1, -10));
+            yield return new TestCaseData(new Historia(1, -10, -10, -10, -10, -10));
         }
     }
 
@@ -39,7 +39,7 @@ public class TestLoan
     }
 
     [Test, TestCaseSource(nameof(TestHistoryProvider))]
-    public void TestNotEnoughDeposits(List<int> history)
+    public void TestNotEnoughDeposits(Historia history)
     {
         konto.Saldo = 100;
         konto.Historia = history;
@@ -53,7 +53,7 @@ public class TestLoan
     public void TestValidLoan()
     {
         konto.Saldo = 100;
-        konto.Historia = [-10, -10, -10, -10, -11];
+        konto.Historia = new Historia(-10, -10, -10, -10, -11);
 
         konto.ZaciagnijKredyt(50);
         

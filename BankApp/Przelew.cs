@@ -24,12 +24,6 @@ public class Przelew
         this.rodzaj = rodzaj;
     }
 
-    private static void ModyfikujSaldo(Konto konto, int kwota)
-    {
-        konto.Saldo += kwota;
-        konto.Historia.Add(kwota);
-    }
-
     public void Wykonaj()
     {
         if (kontoZrodlowe.Saldo < kwota)
@@ -44,12 +38,12 @@ public class Przelew
             _ => throw new ArgumentOutOfRangeException(nameof(rodzaj))
         };
 
-        kontoZrodlowe.ModyfikujSaldo(-kwota);
-        kontoDocelowe.ModyfikujSaldo(kwota);
+        kontoZrodlowe.Wyplac(kwota);
+        kontoDocelowe.Wplac(kwota);
 
         if (oplata > 0)
         {
-            ModyfikujSaldo(kontoZrodlowe, -oplata);
+            kontoZrodlowe.Wyplac(oplata);
         }
     }
 }

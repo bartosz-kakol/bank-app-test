@@ -6,13 +6,15 @@ public abstract class Konto
     
     public int Saldo;
 
-    public List<int> Historia = [];
+    public Historia Historia = new();
 
-    public void ModyfikujSaldo(int kwota)
+    public void Wplac(int kwota)
     {
         Saldo += kwota;
-        Historia.Add(kwota);
+        Historia.DodajWplate(kwota);
     }
+    
+    public void Wyplac(int kwota) => Wplac(-kwota);
 
     public static bool IsPromoCodeValid(string? promoCode) =>
         promoCode != null && promoCode.StartsWith("PROM_") && promoCode.Length == 8;
