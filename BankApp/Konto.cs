@@ -16,6 +16,16 @@ public abstract class Konto
     
     public void Wyplac(int kwota) => Wplac(-kwota);
 
+    public void ZaciagnijKredyt(int kwota)
+    {
+        if (CzyMozeWziacKredyt(kwota))
+        {
+            Wplac(kwota);
+        }
+    }
+
+    protected abstract bool CzyMozeWziacKredyt(int kwota);
+
     public static bool IsPromoCodeValid(string? promoCode) =>
         promoCode != null && promoCode.StartsWith("PROM_") && promoCode.Length == 8;
 

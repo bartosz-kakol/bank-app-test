@@ -17,4 +17,9 @@ public class KontoFirmowe : Konto
         NazwaFirmy = nazwaFirmy;
         NIP = nip;
     }
+    
+    protected override bool CzyMozeWziacKredyt(int kwota)
+    {
+        return Saldo >= kwota * 2 && Historia.Wyplaty.Contains(-1775);
+    }
 }

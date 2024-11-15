@@ -2,7 +2,7 @@ using BankApp;
 
 namespace Testy;
 
-public class TestLoan
+public class TestPersonalLoan
 {
     private const string IMIE = "Dariusz";
     private const string NAZWISKO = "Januszewski";
@@ -39,7 +39,7 @@ public class TestLoan
     }
 
     [Test, TestCaseSource(nameof(TestHistoryProvider))]
-    public void TestNotEnoughDeposits(Historia history)
+    public void TestNotEnoughBalance(Historia history)
     {
         konto.Saldo = 100;
         konto.Historia = history;
