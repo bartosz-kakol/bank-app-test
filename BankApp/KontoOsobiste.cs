@@ -29,7 +29,7 @@ public class KontoOsobiste : Konto
         }
     }
 
-    private bool CzyMozeWziacKredyt(int kwota)
+    protected override bool CzyMozeWziacKredyt(int kwota)
     {
         return
             (
@@ -41,13 +41,5 @@ public class KontoOsobiste : Konto
                 Historia.Wyplaty.Count >= 5 &&
                 Historia.Wyplaty.Select(v => -v).TakeLast(5).Sum() > kwota
             );
-    }
-
-    public void ZaciagnijKredyt(int kwota)
-    {
-        if (CzyMozeWziacKredyt(kwota))
-        {
-            Wplac(kwota);
-        }
     }
 }
