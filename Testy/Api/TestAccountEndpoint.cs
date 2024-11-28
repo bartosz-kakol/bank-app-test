@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
-using System.Text.Json;
+using BankApp;
+using Newtonsoft.Json;
 
 namespace Testy.Api;
 
@@ -21,7 +22,7 @@ public class TestAccountEndpoint
     public async Task TestCreateAccount()
     {
         var jsonContent = new StringContent(
-            JsonSerializer.Serialize(new { imie = IMIE, nazwisko = NAZWISKO, pesel = PESEL }), 
+            JsonConvert.SerializeObject(new { imie = IMIE, nazwisko = NAZWISKO, pesel = PESEL }), 
             Encoding.UTF8, 
             "application/json"
         );
@@ -41,11 +42,11 @@ public class TestAccountEndpoint
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
         var jsonResponse = await response.Content.ReadAsStringAsync();
-        var actualAccount = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonResponse)!;
+        var actualAccount = JsonConvert.DeserializeObject<KontoOsobiste>(jsonResponse)!;
         
-        Assert.That(actualAccount["imie"].ToString()?.Trim(), Is.EqualTo(IMIE));
-        Assert.That(actualAccount["nazwisko"].ToString()?.Trim(), Is.EqualTo(NAZWISKO));
-        Assert.That(actualAccount["pesel"].ToString()?.Trim(), Is.EqualTo(PESEL));
+        Assert.That(actualAccount.Imie, Is.EqualTo(IMIE));
+        Assert.That(actualAccount.Nazwisko, Is.EqualTo(NAZWISKO));
+        Assert.That(actualAccount.Pesel, Is.EqualTo(PESEL));
     }
     
     [Test]

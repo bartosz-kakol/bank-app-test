@@ -1,5 +1,6 @@
 using BankApp;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -29,7 +30,10 @@ app.MapGet("/accounts/{pesel}", (string pesel) =>
 {
     var konto = AccountRegistry.Wyszukaj(pesel);
     
-    return konto is not null ? Results.Ok(konto) : Results.NotFound();
+    return konto is not null ?
+        Results.Content(JsonConvert.SerializeObject(konto))
+        :
+        Results.NotFound();
 });
 
 app.MapPatch("/accounts/{pesel}", (string pesel, [FromBody] Dictionary<string, string> accountData) =>

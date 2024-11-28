@@ -1,11 +1,14 @@
-﻿namespace BankApp;
+﻿using Newtonsoft.Json;
+
+namespace BankApp;
 
 public abstract class Konto
 {
     public abstract Fees Fees { get; }
     
-    public int Saldo;
+    public int Saldo { get; set; }
 
+    [JsonIgnore]
     public Historia Historia = new();
 
     public void Wplac(int kwota)
