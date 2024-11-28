@@ -51,4 +51,20 @@ public class TestAccountsRegistry
         
         Assert.That(konto, Is.Null);
     }
+
+    [Test]
+    public void TestRemoveAccount()
+    {
+        AccountRegistry.Dodaj(kontoOsobiste1);
+
+        var removed = AccountRegistry.Usun(kontoOsobiste1.Pesel);
+        Assert.That(removed, Is.True);
+    }
+
+    [Test]
+    public void TestInvalidRemoveAccount()
+    {
+        var removed = AccountRegistry.Usun(kontoOsobiste1.Pesel);
+        Assert.That(removed, Is.False);
+    }
 }

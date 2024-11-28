@@ -8,9 +8,9 @@ public class KontoFirmowe : Konto
         ExpressTransfer = 5
     };
     
-    public string NazwaFirmy;
+    public string NazwaFirmy { get; set; }
 
-    public string NIP;
+    public string NIP { get; set; }
 
     public KontoFirmowe(string nazwaFirmy, string nip)
     {
