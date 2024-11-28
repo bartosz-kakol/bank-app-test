@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankApp", "BankApp\BankApp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testy", "Testy\Testy.csproj", "{3E6E7807-B8C4-479D-9960-DD5D7FA4819E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankApi", "BankApi\BankApi.csproj", "{96452F9C-01B6-47E6-A86D-9B70FF1D293B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3E6E7807-B8C4-479D-9960-DD5D7FA4819E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E6E7807-B8C4-479D-9960-DD5D7FA4819E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E6E7807-B8C4-479D-9960-DD5D7FA4819E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96452F9C-01B6-47E6-A86D-9B70FF1D293B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96452F9C-01B6-47E6-A86D-9B70FF1D293B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96452F9C-01B6-47E6-A86D-9B70FF1D293B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96452F9C-01B6-47E6-A86D-9B70FF1D293B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

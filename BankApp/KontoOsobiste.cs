@@ -8,11 +8,11 @@ public class KontoOsobiste : Konto
         ExpressTransfer = 1
     };
     
-    public string Imie;
+    public string Imie { get; set; }
 
-    public string Nazwisko;
+    public string Nazwisko { get; set; }
 
-    public string Pesel;
+    public string Pesel { get; set; }
 
     public KontoOsobiste(string imie, string nazwisko, string pesel, string? promoCode = null)
     {
