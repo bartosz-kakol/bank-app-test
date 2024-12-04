@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 namespace Testy.Api;
 
+[Category("API")]
 public class TestAccountEndpoint
 {
     private const string IMIE = "Jan";
