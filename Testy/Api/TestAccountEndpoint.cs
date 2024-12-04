@@ -31,6 +31,11 @@ public class TestAccountEndpoint
 
         response.EnsureSuccessStatusCode();
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+        
+        // Try creating another account with the same PESEL
+        var responseDuplicate = await client.PostAsync("/accounts", jsonContent);
+        
+        Assert.That(responseDuplicate.StatusCode, Is.EqualTo(HttpStatusCode.Conflict));
     }
 
     [Test]

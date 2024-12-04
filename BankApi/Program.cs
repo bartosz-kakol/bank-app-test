@@ -9,10 +9,19 @@ app.UseHttpsRedirection();
 
 app.MapPost("/accounts", ([FromBody] Dictionary<string, string> accountData) =>
 {
+    var pesel = accountData["pesel"];
+
+    var konto = AccountRegistry.Wyszukaj(pesel);
+
+    if (konto is not null)
+    {
+        return Results.Conflict("Konto z tym numerem PESEL już istnieje.");
+    }
+    
     var noweKonto = new KontoOsobiste(
         imie: accountData["imie"],
         nazwisko: accountData["nazwisko"],
-        pesel: accountData["pesel"],
+        pesel: pesel,
         promoCode: accountData!.GetValueOrDefault("promoCode", null)
     );
     
