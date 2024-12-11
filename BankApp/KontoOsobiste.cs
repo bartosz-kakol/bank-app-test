@@ -1,4 +1,6 @@
-﻿namespace BankApp;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BankApp;
 
 public class KontoOsobiste : Konto
 {
@@ -44,6 +46,7 @@ public class KontoOsobiste : Konto
     }
 }
 
+[ExcludeFromCodeCoverage]
 public record KontoOsobisteModel
 {
     public required string Imie { get; set; }
