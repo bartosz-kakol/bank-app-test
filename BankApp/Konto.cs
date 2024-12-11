@@ -8,7 +8,6 @@ public abstract class Konto
     
     public int Saldo { get; set; }
 
-    [JsonIgnore]
     public Historia Historia = new();
 
     public void Wplac(int kwota)

@@ -1,4 +1,6 @@
-﻿namespace BankApp;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BankApp;
 
 public class KontoOsobiste : Konto
 {
@@ -42,4 +44,20 @@ public class KontoOsobiste : Konto
                 Historia.Wyplaty.Select(v => -v).TakeLast(5).Sum() > kwota
             );
     }
+}
+
+[ExcludeFromCodeCoverage]
+public record KontoOsobisteModel
+{
+    public required string Imie { get; set; }
+    
+    public required string Nazwisko { get; set; }
+    
+    public required string Pesel { get; set; }
+    
+    public required int Saldo { get; set; }
+    
+    public required Fees Fees { get; set; }
+    
+    public required int[] Historia { get; set; }
 }
