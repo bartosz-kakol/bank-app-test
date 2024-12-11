@@ -26,20 +26,40 @@ public class TestMoneyTransfer
         }
     }
 
+    public static IEnumerable<TestCaseData> TestAccountLinearProvider
+    {
+        get
+        {
+            yield return new TestCaseData(kontoOsobiste1);
+            yield return new TestCaseData(kontoOsobiste2);
+            yield return new TestCaseData(kontoFirmowe1);
+            yield return new TestCaseData(kontoFirmowe2);
+        }
+    }
+
+    [SetUp]
+    public void Setup()
+    {
+        new List<Konto> { kontoOsobiste1, kontoOsobiste2, kontoFirmowe1, kontoFirmowe2 }.ForEach(konto =>
+        {
+            konto.Saldo = 0;
+            konto.Historia = new Historia();
+        });
+    }
+
     [Test, TestCaseSource(nameof(TestAccountProvider))]
     public void TestTransfer(Konto acc1, Konto acc2)
     {
         acc1.Saldo = acc2.Saldo = 1000;
-        acc1.Historia = new Historia();
-        acc2.Historia = new Historia();
         
         var transfer = new Przelew(
             kontoZrodlowe: acc1,
             kontoDocelowe: acc2,
             kwota: 100
         );
-        transfer.Wykonaj();
-        
+        transfer.Wykonaj(out var sukces);
+
+        Assert.That(sukces, Is.True);
         Assert.That(acc1.Saldo, Is.EqualTo(900 - acc1.Fees.NormalTranfer), "Saldo konta pierwszego nie zostało obniżone poprawnie!");
         Assert.That(acc2.Saldo, Is.EqualTo(1100), "Saldo konta drugiego nie zostało podwyższone poprawnie!");
 
@@ -53,18 +73,16 @@ public class TestMoneyTransfer
     [Test, TestCaseSource(nameof(TestAccountProvider))]
     public void TestInvalidTransfer(Konto acc1, Konto acc2)
     {
-        acc1.Saldo = 0;
         acc2.Saldo = 200;
-        acc1.Historia = new Historia();
-        acc2.Historia = new Historia();
 
         var transfer = new Przelew(
             kontoZrodlowe: acc1,
             kontoDocelowe: acc2,
             kwota: 100
         );
-        transfer.Wykonaj();
-
+        transfer.Wykonaj(out var sukces);
+        
+        Assert.That(sukces, Is.False);
         Assert.That(acc1.Saldo, Is.Zero, "Saldo konta pierwszego zostało zaktualizowane, mimo że nie powinno!");
         Assert.That(acc2.Saldo, Is.EqualTo(200), "Saldo konta drugiego zostało zaktualizowane, mimo że nie powinno!");
         Assert.That(acc1.Historia.Wszystko, Is.Empty, "Historia konta pierwszego nie jest pusta!");
@@ -75,8 +93,6 @@ public class TestMoneyTransfer
     public void TestExpressTransfer(Konto acc1, Konto acc2)
     {
         acc1.Saldo = acc2.Saldo = 1000;
-        acc1.Historia = new Historia();
-        acc2.Historia = new Historia();
 
         var transfer = new Przelew(
             kontoZrodlowe: acc1,
@@ -96,13 +112,10 @@ public class TestMoneyTransfer
         Assert.That(acc2.Historia.Wszystko, Is.EqualTo(targetAccountExpectedHistory.Wszystko), "Historia konta drugiego jest niepoprawna!");
     }
     
-    [Test, TestCaseSource(nameof(TestAccountProvider))]
-    public void TestInvalidExpressTransfer(Konto acc1, Konto acc2)
+    [Test]
+    public void TestInvalidExpressTransfer()
     {
-        kontoOsobiste1.Saldo = 0;
         kontoOsobiste2.Saldo = 200;
-        acc1.Historia = new Historia();
-        acc2.Historia = new Historia();
 
         var transfer = new Przelew(
             kontoZrodlowe: kontoOsobiste1,
@@ -120,8 +133,6 @@ public class TestMoneyTransfer
     public void TestInvalidTransferType(Konto acc1, Konto acc2)
     {
         acc1.Saldo = acc2.Saldo = 1;
-        acc1.Historia = new Historia();
-        acc2.Historia = new Historia();
         
         var transfer = new Przelew(
             kontoZrodlowe: acc1,
@@ -138,5 +149,80 @@ public class TestMoneyTransfer
         Assert.That(acc2.Saldo, Is.EqualTo(1), "Saldo konta drugiego zostało zaktualizowane, mimo że nie powinno!");
         Assert.That(acc1.Historia.Wszystko, Is.Empty, "Historia konta pierwszego nie jest pusta!");
         Assert.That(acc2.Historia.Wszystko, Is.Empty, "Historia konta drugiego nie jest pusta!");
+    }
+
+    [Test, TestCaseSource(nameof(TestAccountLinearProvider))]
+    public void TestSingleAccountIncomingTranfer(Konto konto)
+    {
+        var przelew = new Przelew(konto, Przelew.Kierunek.Przychodzacy, 50);
+        przelew.Wykonaj(out var sukces);
+        
+        Assert.That(sukces, Is.True);
+        Assert.That(konto.Saldo, Is.EqualTo(50));
+        Assert.That(konto.Historia.Wplaty, Is.EqualTo(new List<int> { 50 }));
+    }
+    
+    [Test, TestCaseSource(nameof(TestAccountLinearProvider))]
+    public void TestSingleAccountOutgoingNormalTranfer(Konto konto)
+    {
+        konto.Saldo = 50;
+        
+        var przelew = new Przelew(konto, Przelew.Kierunek.Wychodzacy, 50);
+        przelew.Wykonaj(out var sukces);
+        
+        Assert.That(sukces, Is.True);
+        Assert.That(konto.Saldo, Is.EqualTo(-konto.Fees.NormalTranfer));
+
+        var expectedHistory = new Historia(-50, -konto.Fees.NormalTranfer).Wyplaty;
+        Assert.That(konto.Historia.Wyplaty, Is.EqualTo(expectedHistory));
+    }
+    
+    [Test, TestCaseSource(nameof(TestAccountLinearProvider))]
+    public void TestSingleAccountOutgoingExpressTranfer(Konto konto)
+    {
+        konto.Saldo = 50;
+        
+        var przelew = new Przelew(konto, Przelew.Kierunek.Wychodzacy, 50, Przelew.Rodzaj.Ekspresowy);
+        przelew.Wykonaj(out var sukces);
+        
+        Assert.That(sukces, Is.True);
+        Assert.That(konto.Saldo, Is.EqualTo(-konto.Fees.ExpressTransfer));
+        
+        var expectedHistory = new Historia(-50, -konto.Fees.ExpressTransfer).Wyplaty;
+        Assert.That(konto.Historia.Wyplaty, Is.EqualTo(expectedHistory));
+    }
+    
+    [Test, TestCaseSource(nameof(TestAccountLinearProvider))]
+    public void TestSingleAccountOutgoingInvalidNormalTranfer(Konto konto)
+    {
+        var przelew = new Przelew(konto, Przelew.Kierunek.Wychodzacy, 50);
+        przelew.Wykonaj(out var sukces);
+        
+        Assert.That(sukces, Is.False);
+        Assert.That(konto.Saldo, Is.Zero);
+        Assert.That(konto.Historia.Wszystko, Is.Empty);
+    }
+    
+    [Test, TestCaseSource(nameof(TestAccountLinearProvider))]
+    public void TestSingleAccountOutgoingInvalidExpressTranfer(Konto konto)
+    {
+        var przelew = new Przelew(konto, Przelew.Kierunek.Wychodzacy, 50, Przelew.Rodzaj.Ekspresowy);
+        przelew.Wykonaj(out var sukces);
+        
+        Assert.That(sukces, Is.False);
+        Assert.That(konto.Saldo, Is.Zero);
+        Assert.That(konto.Historia.Wszystko, Is.Empty);
+    }
+
+    [Test, TestCaseSource(nameof(TestAccountLinearProvider))]
+    public void TestSingleAccountInvalidTransferDirection(Konto konto)
+    {
+        konto.Saldo = 50;
+        
+        var przelew = new Przelew(konto, (Przelew.Kierunek)999, 50);
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+        {
+            przelew.Wykonaj(out _);
+        });
     }
 }

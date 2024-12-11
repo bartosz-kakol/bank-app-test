@@ -1,4 +1,5 @@
 using BankApp;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -80,4 +81,43 @@ app.MapDelete("/accounts/{pesel}", (string pesel) =>
     return usuniete ? Results.Ok() : Results.NotFound();
 });
 
+app.MapPost("/accounts/{pesel}/transfer", (string pesel, [FromBody] TransferDataModel transferData) =>
+{
+    var kontoDocelowe = AccountRegistry.Wyszukaj(pesel);
+
+    if (kontoDocelowe is null)
+    {
+        return Results.NotFound();
+    }
+
+    var kwota = transferData.Kwota;
+    Przelew przelew;
+
+    switch (transferData.Type)
+    {
+        case "incoming":
+            przelew = new Przelew(kontoDocelowe, Przelew.Kierunek.Przychodzacy, kwota);
+            break;
+        case "outgoing":
+            przelew = new Przelew(kontoDocelowe, Przelew.Kierunek.Wychodzacy, kwota);
+            break;
+        case "express":
+            przelew = new Przelew(kontoDocelowe, Przelew.Kierunek.Wychodzacy, kwota, Przelew.Rodzaj.Ekspresowy);
+            break;
+        default:
+            return Results.BadRequest("Parametr \"type\" powinien mieć wartość: incoming, outgoing, express.");
+    }
+    
+    przelew.Wykonaj(out var sukces);
+
+    return sukces ? Results.Ok("Zlecenie przyjęto do realizacji") : Results.UnprocessableEntity();
+});
+
 app.Run();
+
+internal record TransferDataModel
+{
+    public required int Kwota { get; init; }
+
+    public required string Type { get; init; }
+}

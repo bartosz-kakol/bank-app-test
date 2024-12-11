@@ -8,35 +8,90 @@ public class Przelew
         Ekspresowy
     }
 
-    private readonly Konto kontoZrodlowe;
+    public enum Kierunek
+    {
+        Wychodzacy,
+        Przychodzacy
+    }
+
+    private readonly Konto? kontoZrodlowe;
 
     private readonly Konto kontoDocelowe;
 
     private readonly int kwota;
     
     private readonly Rodzaj rodzaj;
+    
+    private readonly Kierunek kierunek;
 
-    public Przelew(Konto kontoZrodlowe, Konto kontoDocelowe, int kwota, Rodzaj rodzaj = Rodzaj.Zwyczajny)
+    public Przelew(Konto kontoDocelowe, Kierunek kierunek, int kwota, Rodzaj rodzaj = Rodzaj.Zwyczajny)
     {
-        this.kontoZrodlowe = kontoZrodlowe;
+        kontoZrodlowe = null;
         this.kontoDocelowe = kontoDocelowe;
+        this.kierunek = kierunek;
         this.kwota = kwota;
         this.rodzaj = rodzaj;
     }
 
-    public void Wykonaj()
+    public Przelew(Konto kontoZrodlowe, Konto kontoDocelowe, int kwota, Rodzaj rodzaj = Rodzaj.Zwyczajny)
+        : this(kontoDocelowe, Kierunek.Przychodzacy, kwota, rodzaj)
     {
-        if (kontoZrodlowe.Saldo < kwota)
+        this.kontoZrodlowe = kontoZrodlowe;
+    }
+
+    private static int OplataDla(Konto konto, Rodzaj rodzaj) => rodzaj switch
         {
+            Rodzaj.Zwyczajny => konto.Fees.NormalTranfer,
+            Rodzaj.Ekspresowy => konto.Fees.ExpressTransfer,
+            _ => throw new ArgumentOutOfRangeException(nameof(rodzaj))
+        };
+
+    private void WykonajNaDocelowym(out bool sukces)
+    {
+        switch (kierunek)
+        {
+            case Kierunek.Wychodzacy:
+                if (kontoDocelowe.Saldo < kwota)
+                {
+                    sukces = false;
+                    return;
+                }
+                
+                var oplata = OplataDla(kontoDocelowe, rodzaj);
+
+                kontoDocelowe.Wyplac(kwota);
+
+                if (oplata > 0)
+                {
+                    kontoDocelowe.Wyplac(oplata);
+                }
+                
+                break;
+            case Kierunek.Przychodzacy:
+                kontoDocelowe.Wplac(kwota);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(kierunek));
+        }
+        
+        sukces = true;
+    }
+
+    public void Wykonaj(out bool sukces)
+    {
+        if (kontoZrodlowe == null)
+        {
+            WykonajNaDocelowym(out sukces);
             return;
         }
         
-        var oplata = rodzaj switch
+        if (kontoZrodlowe.Saldo < kwota)
         {
-            Rodzaj.Zwyczajny => kontoZrodlowe.Fees.NormalTranfer,
-            Rodzaj.Ekspresowy => kontoZrodlowe.Fees.ExpressTransfer,
-            _ => throw new ArgumentOutOfRangeException(nameof(rodzaj))
-        };
+            sukces = false;
+            return;
+        }
+
+        var oplata = OplataDla(kontoZrodlowe, rodzaj);
 
         kontoZrodlowe.Wyplac(kwota);
         kontoDocelowe.Wplac(kwota);
@@ -45,5 +100,9 @@ public class Przelew
         {
             kontoZrodlowe.Wyplac(oplata);
         }
+
+        sukces = true;
     }
+
+    public void Wykonaj() => Wykonaj(out _);
 }
