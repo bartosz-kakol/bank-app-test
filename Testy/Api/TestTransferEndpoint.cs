@@ -24,7 +24,7 @@ public class TestTransferEndpoint
     public async Task Setup()
     {
         var jsonContent = new StringContent(
-            JsonConvert.SerializeObject(new { imie = IMIE, nazwisko = NAZWISKO, pesel = PESEL }), 
+            JsonConvert.SerializeObject(new { Imie = IMIE, Nazwisko = NAZWISKO, Pesel = PESEL }), 
             Encoding.UTF8, 
             "application/json"
         );

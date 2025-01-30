@@ -1,5 +1,4 @@
 using BankApp;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -10,7 +9,7 @@ app.UseHttpsRedirection();
 
 app.MapPost("/accounts", ([FromBody] Dictionary<string, string> accountData) =>
 {
-    var pesel = accountData["pesel"];
+    var pesel = accountData["Pesel"];
 
     var konto = AccountRegistry.Wyszukaj(pesel);
 
@@ -20,10 +19,10 @@ app.MapPost("/accounts", ([FromBody] Dictionary<string, string> accountData) =>
     }
     
     var noweKonto = new KontoOsobiste(
-        imie: accountData["imie"],
-        nazwisko: accountData["nazwisko"],
+        imie: accountData["Imie"],
+        nazwisko: accountData["Nazwisko"],
         pesel: pesel,
-        promoCode: accountData!.GetValueOrDefault("promoCode", null)
+        promoCode: accountData!.GetValueOrDefault("PromoCode", null)
     );
     
     AccountRegistry.Dodaj(noweKonto);
@@ -55,18 +54,17 @@ app.MapPatch("/accounts/{pesel}", (string pesel, [FromBody] Dictionary<string, s
         return Results.NotFound();
     }
 
-    if (accountData.TryGetValue("imie", out var noweImie))
+    if (accountData.TryGetValue("Imie", out var noweImie))
     {
         konto.Imie = noweImie;
     }
     
-    if (accountData.TryGetValue("nazwisko", out var noweNazwisko))
+    if (accountData.TryGetValue("Nazwisko", out var noweNazwisko))
     {
         konto.Nazwisko = noweNazwisko;
     }
     
-    
-    if (accountData.TryGetValue("pesel", out var nowyPesel))
+    if (accountData.TryGetValue("Pesel", out var nowyPesel))
     {
         konto.Pesel = nowyPesel;
     }
