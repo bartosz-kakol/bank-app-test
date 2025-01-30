@@ -1,4 +1,5 @@
 ﻿using BankApp;
+using Moq;
 
 namespace Testy;
 
@@ -10,10 +11,10 @@ public class TestMoneyTransfer
     private const string NAZWA_FIRMY = "Januszex";
     private const string NIP = "1234567890";
 
-    private static readonly KontoOsobiste kontoOsobiste1 = new(IMIE, NAZWISKO, PESEL);
-    private static readonly KontoOsobiste kontoOsobiste2 = new(IMIE, NAZWISKO, PESEL);
-    private static readonly KontoFirmowe kontoFirmowe1 = new(NAZWA_FIRMY, NIP);
-    private static readonly KontoFirmowe kontoFirmowe2 = new(NAZWA_FIRMY, NIP);
+    private static KontoOsobiste kontoOsobiste1;
+    private static KontoOsobiste kontoOsobiste2;
+    private static KontoFirmowe kontoFirmowe1;
+    private static KontoFirmowe kontoFirmowe2;
 
     public static IEnumerable<TestCaseData> TestAccountProvider
     {
@@ -35,6 +36,18 @@ public class TestMoneyTransfer
             yield return new TestCaseData(kontoFirmowe1);
             yield return new TestCaseData(kontoFirmowe2);
         }
+    }
+
+    static TestMoneyTransfer()
+    {
+        kontoOsobiste1 = new KontoOsobiste(IMIE, NAZWISKO, PESEL);
+        kontoOsobiste2 = new KontoOsobiste(IMIE, NAZWISKO, PESEL);
+        
+        var mockNipVerifier = new Mock<INIPVerifier>();
+        mockNipVerifier.Setup(verifier => verifier.ZweryfikujNIP("1234567890")).Returns(true);
+
+        kontoFirmowe1 = new KontoFirmowe(NAZWA_FIRMY, NIP, mockNipVerifier.Object);
+        kontoFirmowe2 = new KontoFirmowe(NAZWA_FIRMY, NIP, mockNipVerifier.Object);
     }
 
     [SetUp]

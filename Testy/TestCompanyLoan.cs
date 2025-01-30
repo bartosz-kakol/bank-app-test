@@ -1,4 +1,5 @@
 using BankApp;
+using Moq;
 
 namespace Testy;
 
@@ -36,7 +37,9 @@ public class TestCompanyLoan
     [SetUp]
     public void Setup()
     {
-        konto = new KontoFirmowe(NAZWA_FIRMY, NIP);
+        var mockNipVerifier = new Mock<INIPVerifier>();
+        mockNipVerifier.Setup(verifier => verifier.ZweryfikujNIP("1234567890")).Returns(true);
+        konto = new KontoFirmowe(NAZWA_FIRMY, NIP, mockNipVerifier.Object);
     }
 
     [Test, TestCaseSource(nameof(TestZUSPaymentHistoryProvider))]
