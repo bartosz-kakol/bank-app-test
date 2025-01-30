@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace BankApp;
 
@@ -59,5 +60,14 @@ public class KontoFirmowe : Konto
     protected override bool CzyMozeWziacKredyt(int kwota)
     {
         return Saldo >= kwota * 2 && Historia.Wyplaty.Contains(-1775);
+    }
+
+    public override bool SendHistoryToEmail(string email, ISMTPClient smtpClient)
+    {
+        return smtpClient.Send(
+            $"Wyciąg z dnia {DateTime.Now:yyyy-MM-dd}",
+            $"Historia konta Twojej firmy to: {JsonConvert.SerializeObject(Historia.Wszystko)}",
+            email
+        );
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace BankApp;
 
@@ -43,6 +44,15 @@ public class KontoOsobiste : Konto
                 Historia.Wyplaty.Count >= 5 &&
                 Historia.Wyplaty.Select(v => -v).TakeLast(5).Sum() > kwota
             );
+    }
+    
+    public override bool SendHistoryToEmail(string email, ISMTPClient smtpClient)
+    {
+        return smtpClient.Send(
+            $"Wyciąg z dnia {DateTime.Now:yyyy-MM-dd}",
+            $"Twoja historia konta to: {JsonConvert.SerializeObject(Historia.Wszystko)}",
+            email
+        );
     }
 }
 
