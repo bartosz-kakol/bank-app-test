@@ -26,6 +26,8 @@ public abstract class Konto
         }
     }
 
+    public abstract bool SendHistoryToEmail(string email, ISMTPClient smtpClient);
+
     protected abstract bool CzyMozeWziacKredyt(int kwota);
 
     public static bool IsPromoCodeValid(string? promoCode) =>
