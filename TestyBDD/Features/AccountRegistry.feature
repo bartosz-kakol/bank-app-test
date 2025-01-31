@@ -7,9 +7,9 @@ Feature: Account registry
 
 	Scenario: 02. User is able to create a second account
 		Given Number of accounts in registry equals: 1
-		When I create an account using name: Janusz, last name: Kowalski, pesel: 02020200000
+		When I create an account using name: Janusz, last name: Kowalski, pesel: 12345678903
 		Then Number of accounts in registry equals: 2
-		And Account with pesel 02020200000 exists in registry
+		And Account with pesel 12345678903 exists in registry
 
 	Scenario: 03. User is able to update name of already created account
 		Given Account with pesel 89092909876 exists in registry
@@ -17,9 +17,9 @@ Feature: Account registry
 		Then Account with pesel 89092909876 has Imie equal to russell
 
 	Scenario: 04. User is able to update surname of already created account
-		Given Account with pesel 02020200000 exists in registry
-		When I update Nazwisko of account with pesel: 02020200000 to Wajda
-		Then Account with pesel 02020200000 has Nazwisko equal to Wajda
+		Given Account with pesel 12345678903 exists in registry
+		When I update Nazwisko of account with pesel: 12345678903 to Wajda
+		Then Account with pesel 12345678903 has Nazwisko equal to Wajda
 
 	Scenario: 05. User is able to delete already created account
 		Given Account with pesel 89092909876 exists in registry
@@ -28,7 +28,7 @@ Feature: Account registry
 		And Number of accounts in registry equals: 1
 
 	Scenario: 06. User is able to delete last account
-		Given Account with pesel 02020200000 exists in registry
-		When I delete account with pesel: 02020200000
-		Then Account with pesel 02020200000 does not exist in registry
+		Given Account with pesel 12345678903 exists in registry
+		When I delete account with pesel: 12345678903
+		Then Account with pesel 12345678903 does not exist in registry
 		And Number of accounts in registry equals: 0
