@@ -23,7 +23,7 @@ public class TestAccountEndpoint
     public async Task TestCreateAccount()
     {
         var jsonContent = new StringContent(
-            JsonConvert.SerializeObject(new { imie = IMIE, nazwisko = NAZWISKO, pesel = PESEL }), 
+            JsonConvert.SerializeObject(new { Imie = IMIE, Nazwisko = NAZWISKO, Pesel = PESEL }), 
             Encoding.UTF8, 
             "application/json"
         );
