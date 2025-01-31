@@ -83,7 +83,7 @@ public class TestCreateAccount
         }
 
         var responseAccount = await client.GetAsync($"/accounts/{pesel}");
-        Assert.IsTrue(responseAccount.IsSuccessStatusCode);
+        Assert.That(responseAccount.IsSuccessStatusCode, Is.True);
         
         var responseBody = await responseAccount.Content.ReadAsStringAsync();
         var konto = JsonConvert.DeserializeObject<KontoOsobisteModel>(responseBody);
