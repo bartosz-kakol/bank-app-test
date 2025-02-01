@@ -5,6 +5,7 @@ using Testy.Api.Models;
 
 namespace Testy.Performance;
 
+[Category("Performance")]
 public class TestPerfAccountAPI
 {
     private readonly HttpClient client = new();

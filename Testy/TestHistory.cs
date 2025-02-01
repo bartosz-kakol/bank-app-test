@@ -2,6 +2,7 @@ using BankApp;
 
 namespace Testy;
 
+[Category("Unit")]
 public class TestHistory
 {
     private Historia historia;

@@ -2,6 +2,7 @@ using BankApp;
 
 namespace Testy;
 
+[Category("Unit")]
 public class Tests
 {
     private const string IMIE = "Dariusz";

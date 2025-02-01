@@ -3,6 +3,7 @@ using Moq;
 
 namespace Testy;
 
+[Category("Unit")]
 internal class TestCreateCompanyAccount
 {
     private const string NAZWA_FIRMY = "Januszex";

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace Testy;
 
+[Category("Unit")]
 public class TestAccountsRegistry
 {
     private static readonly KontoOsobiste kontoOsobiste1 = new("Dariusz", "Januszewski", "12345678901");

@@ -3,6 +3,7 @@ using Moq;
 
 namespace Testy;
 
+[Category("Unit")]
 public class TestMoneyTransfer
 {
     private const string IMIE = "Dariusz";
