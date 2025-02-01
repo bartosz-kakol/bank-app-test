@@ -5,11 +5,11 @@ using Testy.Api.Models;
 
 namespace Testy.Performance;
 
-public class TestCreateAccount
+public class TestPerfAccountAPI
 {
     private readonly HttpClient client = new();
 
-    public TestCreateAccount()
+    public TestPerfAccountAPI()
     {
         client.BaseAddress = new Uri("http://localhost:5074");
     }
