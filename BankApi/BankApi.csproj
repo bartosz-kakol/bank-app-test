@@ -16,4 +16,8 @@
       <ProjectReference Include="..\BankApp\BankApp.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="registryBackup.example.json" />
+    </ItemGroup>
+
 </Project>

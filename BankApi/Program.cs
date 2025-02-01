@@ -111,6 +111,29 @@ app.MapPost("/accounts/{pesel}/transfer", (string pesel, [FromBody] TransferData
     return sukces ? Results.Ok("Zlecenie przyjęto do realizacji") : Results.UnprocessableEntity();
 });
 
+app.MapGet("/accounts/backup", () =>
+{
+    using var fs = new FileStream("registryBackup.json", FileMode.Create);
+    AccountRegistry.Zapisz(fs);
+    
+    return Results.Ok();
+});
+
+app.MapGet("/accounts/restore", () =>
+{
+    try
+    {
+        using var fs = new FileStream("registryBackup.json", FileMode.Open);
+        AccountRegistry.Wczytaj(fs);
+
+        return Results.Ok();
+    }
+    catch (FileNotFoundException)
+    {
+        return Results.NotFound("Plik z backupem nie został znaleziony!");
+    }
+});
+
 app.Run();
 
 internal record TransferDataModel
