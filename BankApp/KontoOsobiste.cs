@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BankApp;
 
-public class KontoOsobiste : Konto
+public class KontoOsobiste : Konto, IEquatable<KontoOsobiste>
 {
     public override Fees Fees => new()
     {
@@ -53,6 +53,45 @@ public class KontoOsobiste : Konto
             $"Twoja historia konta to: {JsonConvert.SerializeObject(Historia.Wszystko)}",
             email
         );
+    }
+    
+    public static bool operator ==(KontoOsobiste? obj1, KontoOsobiste? obj2)
+    {
+        if (ReferenceEquals(obj1, obj2)) return true;
+        if (ReferenceEquals(obj1, null)) return false;
+        if (ReferenceEquals(obj2, null)) return false;
+        
+        return obj1.Equals(obj2);
+    }
+    
+    public static bool operator !=(KontoOsobiste? obj1, KontoOsobiste? obj2) => !(obj1 == obj2);
+    
+    public virtual bool Equals(KontoOsobiste? other)
+    {
+        if (ReferenceEquals(other, null)) return false;
+        if (ReferenceEquals(this, other)) return true;
+
+        return Saldo.Equals(other.Saldo)
+               && Historia.Equals(other.Historia)
+               && Imie.Equals(other.Imie)
+               && Nazwisko.Equals(other.Nazwisko)
+               && Pesel.Equals(other.Pesel);
+    }
+    
+    public override bool Equals(object? obj) => Equals(obj as KontoOsobiste);
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            var hashCode = Saldo.GetHashCode();
+            hashCode = (hashCode * 397) ^ (Historia != null ? Historia.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ (Imie != null ? Imie.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ (Nazwisko != null ? Nazwisko.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ (Pesel != null ? Pesel.GetHashCode() : 0);
+        
+            return hashCode;            
+        }
     }
 }
 

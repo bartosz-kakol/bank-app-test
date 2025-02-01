@@ -1,0 +1,22 @@
+[
+  {
+    "Historia": [
+      25
+    ],
+    "Imie": "Dariusz",
+    "Nazwisko": "Januszewski",
+    "Pesel": "12345678901",
+    "Saldo": 25
+  },
+  {
+    "Historia": [
+      35,
+      -30,
+      60
+    ],
+    "Imie": "Damian",
+    "Nazwisko": "Majtczak",
+    "Pesel": "10987654321",
+    "Saldo": 65
+  }
+]

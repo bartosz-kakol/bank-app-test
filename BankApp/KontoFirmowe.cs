@@ -70,4 +70,41 @@ public class KontoFirmowe : Konto
             email
         );
     }
+    
+    public static bool operator ==(KontoFirmowe? obj1, KontoFirmowe? obj2)
+    {
+        if (ReferenceEquals(obj1, obj2)) return true;
+        if (ReferenceEquals(obj1, null)) return false;
+        if (ReferenceEquals(obj2, null)) return false;
+        
+        return obj1.Equals(obj2);
+    }
+    
+    public static bool operator !=(KontoFirmowe? obj1, KontoFirmowe? obj2) => !(obj1 == obj2);
+    
+    public virtual bool Equals(KontoFirmowe? other)
+    {
+        if (ReferenceEquals(other, null)) return false;
+        if (ReferenceEquals(this, other)) return true;
+
+        return Saldo.Equals(other.Saldo)
+               && Historia.Equals(other.Historia)
+               && NazwaFirmy.Equals(other.NazwaFirmy)
+               && NIP.Equals(other.NIP);
+    }
+    
+    public override bool Equals(object? obj) => Equals(obj as KontoFirmowe);
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            var hashCode = Saldo.GetHashCode();
+            hashCode = (hashCode * 397) ^ (Historia != null ? Historia.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ (NazwaFirmy != null ? NazwaFirmy.GetHashCode() : 0);
+            hashCode = (hashCode * 397) ^ (NIP != null ? NIP.GetHashCode() : 0);
+        
+            return hashCode;            
+        }
+    }
 }

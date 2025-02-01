@@ -4,6 +4,7 @@ namespace BankApp;
 
 public abstract class Konto
 {
+    [JsonIgnore]
     public abstract Fees Fees { get; }
     
     public int Saldo { get; set; }
