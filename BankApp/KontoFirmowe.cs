@@ -95,6 +95,7 @@ public class KontoFirmowe : Konto
     
     public override bool Equals(object? obj) => Equals(obj as KontoFirmowe);
 
+    [ExcludeFromCodeCoverage]
     public override int GetHashCode()
     {
         unchecked

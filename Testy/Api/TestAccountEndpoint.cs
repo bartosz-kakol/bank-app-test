@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text;
-using BankApp;
 using Newtonsoft.Json;
+using Testy.Api.Models;
 
 namespace Testy.Api;
 
@@ -48,7 +48,7 @@ public class TestAccountEndpoint
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
         var jsonResponse = await response.Content.ReadAsStringAsync();
-        var actualAccount = JsonConvert.DeserializeObject<KontoOsobiste>(jsonResponse)!;
+        var actualAccount = JsonConvert.DeserializeObject<KontoOsobisteModel>(jsonResponse)!;
         
         Assert.That(actualAccount.Imie, Is.EqualTo(IMIE));
         Assert.That(actualAccount.Nazwisko, Is.EqualTo(NAZWISKO));

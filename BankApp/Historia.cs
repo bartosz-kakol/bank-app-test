@@ -81,5 +81,6 @@ public class Historia : IEquatable<Historia>
     
     public override bool Equals(object? obj) => Equals(obj as Historia);
 
+    [ExcludeFromCodeCoverage]
     public override int GetHashCode() => Wszystko.GetHashCode();
 }

@@ -11,6 +11,8 @@ public class TestAccountsRegistry
     [SetUp]
     public void Setup()
     {
+        kontoOsobiste1.Historia = new Historia();
+        kontoOsobiste2.Historia = new Historia();
         kontoOsobiste1.Wplac(25);
         kontoOsobiste2.Wplac(35);
         kontoOsobiste2.Wyplac(30);
@@ -90,7 +92,6 @@ public class TestAccountsRegistry
         var json = reader.ReadToEnd();
         
         Assert.That(json, Is.EqualTo(expectedJson), "Zapisany JSON się nie zgadza!");
-        Console.WriteLine(json);
         
         AccountRegistry.Wyczysc();
         
@@ -98,5 +99,21 @@ public class TestAccountsRegistry
         AccountRegistry.Wczytaj(ms);
         
         Assert.That(AccountRegistry.Wszystkie, Is.EquivalentTo(expected), "Wczytanie dało inny wynik niż spodziewany!");
+    }
+
+    [Test]
+    public void TestInvalidBackupImport()
+    {
+        using var ms = new MemoryStream();
+        
+        var bytes = "null"u8.ToArray();
+        ms.Write(bytes, 0, bytes.Length);
+        ms.Position = 0;
+        
+        Assert.DoesNotThrow(() =>
+        {
+            AccountRegistry.Wczytaj(ms);
+        });
+        Assert.That(AccountRegistry.IloscKont, Is.Zero);
     }
 }

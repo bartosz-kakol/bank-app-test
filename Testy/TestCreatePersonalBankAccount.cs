@@ -68,4 +68,28 @@ public class Tests
 
         Assert.That(konto.Saldo, Is.Zero, "Premia została przyznana przy zbyt niskim roku urodzenia!");
     }
+
+    [Test]
+    public void TestComparePersonalAccount()
+    {
+        var konto2 = new KontoOsobiste(IMIE, NAZWISKO, PESEL);
+        
+        Assert.That(konto, Is.EqualTo(konto2));
+        Assert.That(konto == konto2, Is.True);
+
+        konto2 = new KontoOsobiste(IMIE, NAZWISKO, "12345678900");
+        
+        Assert.That(konto, Is.Not.EqualTo(konto2));
+        Assert.That(konto != konto2, Is.True);
+        
+        Assert.That(konto, Is.Not.EqualTo(null));
+        Assert.That(konto == null, Is.False);
+        Assert.That(konto != null, Is.True);
+        Assert.That(konto.Equals(null), Is.False);
+        
+        Assert.That(konto == konto, Is.True);
+        Assert.That(konto.Equals(konto), Is.True);
+        Assert.That(konto.Equals((object)konto), Is.True);
+        Assert.That(konto != konto, Is.False);
+    }
 }

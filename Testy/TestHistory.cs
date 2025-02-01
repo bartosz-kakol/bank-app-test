@@ -50,4 +50,30 @@ public class TestHistory
         Assert.That(historia.Wszystko.Last(), Is.EqualTo(-money), "Niepoprawna kwota została dodana do historii!");
         Assert.That(historia.Wyplaty.Last(), Is.EqualTo(-money), "Niepoprawna kwota została dodana do historii wypłat!");
     }
+
+    [Test]
+    public void TestCompare()
+    {
+        var h1 = new Historia(1, 2, -3, 4, 5, -6, 7, 8, -9, 10);
+        var h2 = new Historia(1, 2, -3, 4, 5, -6, 7, 8, -9, 10);
+        
+        Assert.That(h1, Is.EqualTo(h2));
+        Assert.That(h1.Equals((object)h2), Is.True);
+        Assert.That(h1 == h2, Is.True);
+        Assert.That(h1 != h2, Is.False);
+        
+        h2.DodajWplate(11);
+        
+        Assert.That(h1, Is.Not.EqualTo(h2));
+        Assert.That(h1.Equals((object)h2), Is.False);
+        Assert.That(h1 == h2, Is.False);
+        Assert.That(h1 != h2, Is.True);
+        
+        Assert.That(h1 == null, Is.False);
+        Assert.That(h1 != null, Is.True);
+        Assert.That(h1.Equals(null), Is.False);
+        Assert.That(h1 == h1, Is.True);
+        Assert.That(h1.Equals(h1), Is.True);
+        Assert.That(h1 != h1, Is.False);
+    }
 }

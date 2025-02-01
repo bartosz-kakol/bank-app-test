@@ -80,6 +80,7 @@ public class KontoOsobiste : Konto, IEquatable<KontoOsobiste>
     
     public override bool Equals(object? obj) => Equals(obj as KontoOsobiste);
 
+    [ExcludeFromCodeCoverage]
     public override int GetHashCode()
     {
         unchecked
