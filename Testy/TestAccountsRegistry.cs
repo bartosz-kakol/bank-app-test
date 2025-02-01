@@ -1,4 +1,5 @@
 using BankApp;
+using Newtonsoft.Json;
 
 namespace Testy;
 
@@ -10,6 +11,12 @@ public class TestAccountsRegistry
     [SetUp]
     public void Setup()
     {
+        kontoOsobiste1.Historia = new Historia();
+        kontoOsobiste2.Historia = new Historia();
+        kontoOsobiste1.Wplac(25);
+        kontoOsobiste2.Wplac(35);
+        kontoOsobiste2.Wyplac(30);
+        kontoOsobiste2.Wplac(60);
         AccountRegistry.Wyczysc();
     }
 
@@ -66,5 +73,47 @@ public class TestAccountsRegistry
     {
         var removed = AccountRegistry.Usun(kontoOsobiste1.Pesel);
         Assert.That(removed, Is.False);
+    }
+
+    [Test]
+    public void TestBackup()
+    {
+        AccountRegistry.Dodaj(kontoOsobiste1);
+        AccountRegistry.Dodaj(kontoOsobiste2);
+        var expected = new List<KontoOsobiste> { kontoOsobiste1, kontoOsobiste2 };
+        var expectedJson = JsonConvert.SerializeObject(expected, Formatting.Indented);
+        
+        using var ms = new MemoryStream();
+        
+        AccountRegistry.Zapisz(ms);
+        
+        ms.Position = 0;
+        using var reader = new StreamReader(ms);
+        var json = reader.ReadToEnd();
+        
+        Assert.That(json, Is.EqualTo(expectedJson), "Zapisany JSON się nie zgadza!");
+        
+        AccountRegistry.Wyczysc();
+        
+        ms.Position = 0;
+        AccountRegistry.Wczytaj(ms);
+        
+        Assert.That(AccountRegistry.Wszystkie, Is.EquivalentTo(expected), "Wczytanie dało inny wynik niż spodziewany!");
+    }
+
+    [Test]
+    public void TestInvalidBackupImport()
+    {
+        using var ms = new MemoryStream();
+        
+        var bytes = "null"u8.ToArray();
+        ms.Write(bytes, 0, bytes.Length);
+        ms.Position = 0;
+        
+        Assert.DoesNotThrow(() =>
+        {
+            AccountRegistry.Wczytaj(ms);
+        });
+        Assert.That(AccountRegistry.IloscKont, Is.Zero);
     }
 }

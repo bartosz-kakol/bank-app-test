@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text;
-using BankApp;
 using Newtonsoft.Json;
+using Testy.Api.Models;
 
 namespace Testy.Api;
 
@@ -81,7 +81,7 @@ public class TestTransferEndpoint
         var konto = await GetAccount();
         Assert.That(konto.Saldo, Is.EqualTo(50));
         
-        var expectedHistory = new Historia(50).Wszystko;
+        var expectedHistory = new[] { 50 };
         Assert.That(konto.Historia, Is.EqualTo(expectedHistory));
     }
 
@@ -104,7 +104,7 @@ public class TestTransferEndpoint
         var konto = await GetAccount();
         Assert.That(konto.Saldo, Is.Zero);
 
-        var expectedHistory = new Historia(50, -50).Wszystko;
+        var expectedHistory = new[] { 50, -50 };
         Assert.That(konto.Historia, Is.EqualTo(expectedHistory));
     }
 
@@ -125,7 +125,7 @@ public class TestTransferEndpoint
         var konto = await GetAccount();
         Assert.That(konto.Saldo, Is.EqualTo(30));
         
-        var expectedHistory = new Historia(30).Wszystko;
+        var expectedHistory = new[] { 30 };
         Assert.That(konto.Historia, Is.EqualTo(expectedHistory));
     }
 
@@ -146,7 +146,7 @@ public class TestTransferEndpoint
         var konto = await GetAccount();
         Assert.That(konto.Saldo, Is.EqualTo(-1));
         
-        var expectedHistory = new Historia(50, -50, -konto.Fees.ExpressTransfer).Wszystko;
+        var expectedHistory = new[] { 50, -50, -1 };
         Assert.That(konto.Historia, Is.EqualTo(expectedHistory));
     }
 
@@ -167,7 +167,7 @@ public class TestTransferEndpoint
         var konto = await GetAccount();
         Assert.That(konto.Saldo, Is.EqualTo(30));
         
-        var expectedHistory = new Historia(30).Wszystko;
+        var expectedHistory = new[] { 30 };
         Assert.That(konto.Historia, Is.EqualTo(expectedHistory));
     }
 

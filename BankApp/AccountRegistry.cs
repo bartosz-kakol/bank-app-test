@@ -1,4 +1,7 @@
 using System.Collections.ObjectModel;
+using System.Text.Json;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BankApp;
 
@@ -27,5 +30,24 @@ public static class AccountRegistry
     public static void Wyczysc()
     {
         baza.Clear();
+    }
+    
+    public static void Zapisz(Stream stream)
+    {
+        using var writer = new StreamWriter(stream, leaveOpen: true);
+        var json = JsonConvert.SerializeObject(baza, Formatting.Indented);
+        writer.Write(json);
+    }
+
+    public static void Wczytaj(Stream stream)
+    {
+        using var reader = new StreamReader(stream);
+        var json = reader.ReadToEnd();
+        var konta = JsonConvert.DeserializeObject<List<KontoOsobiste>>(json);
+        
+        if (konta == null) return;
+        
+        baza.Clear();
+        baza.AddRange(konta);
     }
 }
