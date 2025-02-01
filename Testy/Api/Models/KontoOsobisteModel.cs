@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using BankApp;
 
 namespace Testy.Api.Models;
 
@@ -13,8 +12,6 @@ public record KontoOsobisteModel
     public required string Pesel { get; set; }
     
     public required int Saldo { get; set; }
-    
-    public required Fees Fees { get; set; }
     
     public required int[] Historia { get; set; }
 }
