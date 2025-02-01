@@ -24,5 +24,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    - name: Run the API (in the background)
+      run: nohup dotnet run --project ./BankApi &
+    - name: Wait for API
+      run: sleep 15
     - name: Test
-      run: dotnet test --no-build --verbosity normal --filter "Category!=API"
+      run: dotnet test --no-build --verbosity normal
