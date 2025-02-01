@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text;
-using BankApp;
 using Newtonsoft.Json;
+using Testy.Api.Models;
 
 namespace Testy.Performance;
 
